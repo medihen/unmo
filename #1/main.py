@@ -1,6 +1,6 @@
 # Python初心者に送る「人工知能の作り方」
 # http://sandmark.hateblo.jp/entry/2017/10/07/141339
-# 掲載されたコードを写経して勉強する。
+# に掲載されたコードを写経して勉強する。
 
 class Responder:
     """ AIの応答をコントロールするクラス
@@ -21,5 +21,3 @@ class Responder:
     def name(self):
         """応答オブジェクトの名前"""
         return self._name
-
-    
