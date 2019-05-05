@@ -72,16 +72,6 @@ class Dictionary:
         with open(Dictionary.DICT_RANDOM, mode='w', encoding='utf-8') as f:
             f.write('\n'.join(self.random))
 
-        save_lines = []
-        for pat in self.pattern:
-            save_lines.append(pat['pattern'] + '\t')
-            for ph in pat['phrases']:
-                save_lines[-1] = save_lines[-1] + ph +'|'
-            save_lines[-1] = save_lines[-1].rstrip('|')
-         with open(Dictionary.DICT_PATTERN, mode='w', encoding='utf-8') as f:
-            f.write('\n'.join(save_lines))
-
-
     @staticmethod
     def make_pattern(line):
         """

@@ -2,9 +2,10 @@
 # http://sandmark.hateblo.jp/entry/2017/10/07/141339
 # に掲載されたコードを写経して勉強する。
 
-from random import choice
-from responder import RandomResponder, WhatResponder, PatternResponder
+from random import choice, randrange
+from responder import RandomResponder, WhatResponder, PatternResponder, TemplateResponder
 from dictionary import Dictionary
+import morph
 
 class Unmo:
     """
@@ -26,7 +27,8 @@ class Unmo:
         self._responders = {
             'what':     WhatResponder('What', self._dictionary),
             'random':   RandomResponder('Random', self._dictionary),
-            'pattern':  PatternResponder('Pattern', self._dictionary)
+            'pattern':  PatternResponder('Pattern', self._dictionary),
+            'template': TemplateResponder('Template', self._dictionary),
         }
         self._name = name
         self._responder = self._responders['pattern']
@@ -35,10 +37,28 @@ class Unmo:
         """
         ユーザからの入力を受け取り、Responderに処理させた結果を返す。
         呼び出されるたびにランダムでResponderを切り替える。
+        入力をDictionaryに記憶させる。
         """
-        chosen_key = choice(list(self._responders.keys()))
-        self._responder = self._responders[chosen_key]
-        return self._responder.response(text)
+        chance = randrange(0, 100)
+        if chance in range(0, 39):
+            self._responder = self._responders['pattern']
+        elif chance in range(40, 69):
+            self._responder = self._responders['template']
+        elif chance in range(70, 89):
+            self._responder = self._responders['random']
+        else:
+            self._responder = self._responders['what']
+
+        parts = morph.analyze(text)
+        response = self._responder.response(text, parts)
+        self._dictionary.study(text, parts)
+        return response
+
+    def save(self):
+        """
+        Dictionaryへの保存を行う。
+        """
+        self._dictionary.save()
 
     @property
     def name(self):
